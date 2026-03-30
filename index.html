@@ -14,7 +14,7 @@
   --border: rgba(255,255,255,0.07);
   --border2: rgba(255,255,255,0.13);
   --accent: #22c55e;
-  --accent-dim: rgba(34, 197, 94, 0.12);
+  --accent-dim: rgba(34,197,94,0.12);
   --teal: #4fc3a1;
   --teal-dim: rgba(79,195,161,0.12);
   --danger: #f06464;
@@ -25,6 +25,9 @@
   --blue-dim: rgba(126,184,247,0.12);
   --purple: #b07ef7;
   --purple-dim: rgba(176,126,247,0.12);
+  --excess: #22c55e;
+  --excess-dim: rgba(34,197,94,0.12);
+  --excess-mid: rgba(34,197,94,0.22);
   --text: #e2e4ec;
   --muted: #7a8494;
   --muted2: #4a5260;
@@ -35,7 +38,7 @@
 body { font-family: var(--font-mono); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 13px; }
 body::before {
   content: ''; position: fixed; inset: 0;
-  background: radial-gradient(ellipse at 10% 10%, rgba(232,197,71,0.03) 0%, transparent 55%),
+  background: radial-gradient(ellipse at 10% 10%, rgba(34,197,94,0.03) 0%, transparent 55%),
               radial-gradient(ellipse at 90% 90%, rgba(79,195,161,0.03) 0%, transparent 55%);
   pointer-events: none; z-index: 0;
 }
@@ -43,7 +46,6 @@ body::before {
 
 .header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
 .header h1 { font-family: var(--font-head); font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-.header h1 span { color: var(--accent); }
 .header p { color: var(--muted); margin-top: 4px; font-size: 12px; }
 
 .sheet-bar { background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: 14px 20px; margin-bottom: 24px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -61,27 +63,31 @@ body::before {
 select { background: var(--surface); border: 1px solid var(--border2); border-radius: 6px; padding: 7px 12px; color: var(--text); font-family: var(--font-mono); font-size: 12px; outline: none; cursor: pointer; }
 select:focus { border-color: var(--accent); }
 
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
-.card-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-.card-value { font-family: var(--font-head); font-size: 26px; font-weight: 800; line-height: 1; }
-.card-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.card.c-accent { border-color: rgba(232,197,71,0.25); } .card.c-accent .card-value { color: var(--accent); }
-.card.c-teal   { border-color: rgba(79,195,161,0.25); } .card.c-teal   .card-value { color: var(--teal); }
-.card.c-danger { border-color: rgba(240,100,100,0.25);} .card.c-danger .card-value { color: var(--danger); }
-.card.c-warn   { border-color: rgba(240,160,96,0.25); } .card.c-warn   .card-value { color: var(--warn); }
+.summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.scard { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+.scard-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.scard-value { font-family: var(--font-head); font-size: 26px; font-weight: 800; line-height: 1; }
+.scard-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.scard.c-accent { border-color: rgba(34,197,94,0.25); } .scard.c-accent .scard-value { color: var(--accent); }
+.scard.c-teal   { border-color: rgba(79,195,161,0.25); } .scard.c-teal   .scard-value { color: var(--teal); }
+.scard.c-danger { border-color: rgba(240,100,100,0.25);} .scard.c-danger .scard-value { color: var(--danger); }
+.scard.c-warn   { border-color: rgba(240,160,96,0.25); } .scard.c-warn   .scard-value { color: var(--warn); }
 
-.tabs { display: flex; gap: 2px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
-.tab { padding: 10px 18px; font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; }
+.tabs { display: flex; gap: 2px; margin-bottom: 20px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+.tab { padding: 10px 18px; font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
 .tab:hover { color: var(--text); }
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab.tab-fire { }
+.tab.tab-fire.active { color: var(--accent); border-bottom-color: var(--accent); }
 .section { display: none; }
 .section.active { display: block; }
 
+/* CHARTS */
 .chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
 .chart-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; margin-bottom: 16px; }
 .chart-container { position: relative; width: 100%; height: 280px; }
 
+/* TABLE */
 .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
 .table-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .table-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; }
@@ -94,111 +100,269 @@ td { padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: 12px;
 tbody tr:hover { background: rgba(255,255,255,0.02); }
 tbody tr:last-child td { border-bottom: none; }
 
+/* BADGES */
 .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; white-space: nowrap; }
 .b-excess  { background: var(--teal-dim);   color: var(--teal);   border: 1px solid rgba(79,195,161,0.25); }
 .b-lack    { background: var(--danger-dim); color: var(--danger); border: 1px solid rgba(240,100,100,0.25); }
 .b-lack1   { background: var(--warn-dim);   color: var(--warn);   border: 1px solid rgba(240,160,96,0.25); }
 .b-neutral { background: rgba(122,132,148,0.1); color: var(--muted); border: 1px solid var(--border2); }
-.b-multi   { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(232,197,71,0.25); }
+.b-multi   { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(34,197,94,0.25); }
 .b-warn-sm { display:inline-block; font-size:9px; padding:1px 5px; border-radius:3px; background:var(--warn-dim); color:var(--warn); border:1px solid rgba(240,160,96,0.3); margin-left:4px; vertical-align:middle; }
 
 .sku-list { display: flex; flex-wrap: wrap; gap: 3px; }
 .sku { background: var(--surface2); border: 1px solid var(--border2); border-radius: 3px; padding: 2px 5px; font-size: 10px; color: var(--muted); }
 
-/* ── CROSS SECTION ───────────────────────────── */
-
-/* Subtabs dentro da aba substituição */
+/* ── CROSS ── */
 .subtabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
-.subtab {
-  padding: 7px 14px;
-  font-family: var(--font-head);
-  font-size: 12px;
-  font-weight: 600;
-  border-radius: 20px;
-  cursor: pointer;
-  border: 1px solid var(--border2);
-  color: var(--muted);
-  background: transparent;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
+.subtab { padding: 7px 14px; font-family: var(--font-head); font-size: 12px; font-weight: 600; border-radius: 20px; cursor: pointer; border: 1px solid var(--border2); color: var(--muted); background: transparent; transition: all 0.15s; white-space: nowrap; }
 .subtab:hover { color: var(--text); border-color: var(--text); }
 .subtab.active-exact  { background: var(--teal-dim);   color: var(--teal);   border-color: rgba(79,195,161,0.4); }
 .subtab.active-cut    { background: var(--blue-dim);   color: var(--blue);   border-color: rgba(126,184,247,0.4); }
-.subtab.active-excess { background: var(--accent-dim); color: var(--accent); border-color: rgba(232,197,71,0.4); }
+.subtab.active-excess { background: var(--accent-dim); color: var(--accent); border-color: rgba(34,197,94,0.4); }
 .subtab.active-risk   { background: var(--danger-dim); color: var(--danger); border-color: rgba(240,100,100,0.4); }
+.subtab-count { display:inline-block; background:var(--surface2); border-radius:10px; padding:1px 6px; font-size:10px; margin-left:4px; }
+.cross-legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:11px; color:var(--muted); }
+.legend-item { display:flex; align-items:center; gap:6px; }
+.legend-dot  { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.cross-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:12px; }
+.cross-head { display:flex; align-items:center; gap:10px; padding:12px 16px; background:var(--surface2); border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.cross-medida { font-family:var(--font-head); font-size:15px; font-weight:700; color:var(--accent); }
+.cross-type-badge { font-size:10px; font-weight:600; padding:3px 9px; border-radius:10px; font-family:var(--font-head); white-space:nowrap; }
+.ctb-exact  { background:var(--teal-dim);   color:var(--teal);   border:1px solid rgba(79,195,161,0.3); }
+.ctb-cut    { background:var(--blue-dim);   color:var(--blue);   border:1px solid rgba(126,184,247,0.3); }
+.ctb-excess { background:var(--accent-dim); color:var(--accent); border:1px solid rgba(34,197,94,0.3); }
+.ctb-risk   { background:var(--danger-dim); color:var(--danger); border:1px solid rgba(240,100,100,0.3); }
+.cross-body { padding:12px 16px; display:flex; flex-wrap:wrap; gap:10px; }
+.ce { flex:1; min-width:200px; border:1px solid var(--border2); border-radius:8px; padding:10px 12px; }
+.ce.excess       { border-color:rgba(79,195,161,0.35);  background:rgba(79,195,161,0.04); }
+.ce.lack         { border-color:rgba(240,100,100,0.35); background:rgba(240,100,100,0.04); }
+.ce.source       { border-color:rgba(126,184,247,0.35); background:rgba(126,184,247,0.04); }
+.ce.target       { border-color:rgba(240,100,100,0.35); background:rgba(240,100,100,0.04); }
+.ce.alert-excess { border-color:rgba(34,197,94,0.35);   background:rgba(34,197,94,0.04); }
+.ce.alert-risk   { border-color:rgba(240,100,100,0.35); background:rgba(240,100,100,0.04); }
+.ce-name { font-family:var(--font-head); font-size:13px; font-weight:700; margin-bottom:6px; }
+.ce-row  { display:flex; justify-content:space-between; margin-top:4px; font-size:11px; color:var(--muted); }
+.ce-row span:last-child { color:var(--text); font-weight:500; }
+.ce-tip  { margin-top:8px; padding:5px 8px; border-radius:5px; font-size:10px; line-height:1.4; }
+.ce-tip.ok     { background:var(--teal-dim);   color:var(--teal);   border:1px solid rgba(79,195,161,0.2); }
+.ce-tip.bad    { background:var(--danger-dim); color:var(--danger); border:1px solid rgba(240,100,100,0.2); }
+.ce-tip.info   { background:var(--blue-dim);   color:var(--blue);   border:1px solid rgba(126,184,247,0.2); }
+.ce-tip.warn   { background:var(--warn-dim);   color:var(--warn);   border:1px solid rgba(240,160,96,0.2); }
+.ce-tip.accent { background:var(--accent-dim); color:var(--accent); border:1px solid rgba(34,197,94,0.2); }
+.loss-box { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:12px 10px; min-width:110px; max-width:130px; flex-shrink:0; border-radius:10px; border:1px solid var(--border2); background:var(--surface2); text-align:center; }
+.loss-icon { font-size:20px; line-height:1; }
+.loss-label { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
+.loss-pct { font-family:var(--font-head); font-size:22px; font-weight:800; line-height:1; }
+.loss-pct.low { color:var(--teal); } .loss-pct.medium { color:var(--warn); } .loss-pct.high { color:var(--danger); }
+.loss-vol { font-size:10px; color:var(--muted); }
+.loss-arrow { font-size:16px; color:var(--muted); }
+.process-alert { margin-top:8px; padding:7px 10px; border-radius:6px; font-size:10px; line-height:1.5; background:rgba(176,126,247,0.1); color:var(--purple); border:1px solid rgba(176,126,247,0.25); }
+.cut-arrow { display:flex; align-items:center; justify-content:center; flex-direction:column; gap:4px; padding:8px 4px; color:var(--blue); font-size:18px; min-width:28px; }
+.cut-arrow span { font-size:9px; color:var(--muted); white-space:nowrap; text-align:center; }
 
-.cross-legend {
-  display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px;
-  font-size: 11px; color: var(--muted);
+/* ══ EXCESSO DE ESTOQUE ═══════════════════════════════════════ */
+
+/* Banner de topo */
+.queima-banner {
+  background: linear-gradient(135deg, #061a0e 0%, #0d2b17 50%, #061a0e 100%);
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
 }
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-
-/* Card de medida */
-.cross-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
-.cross-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--surface2); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-.cross-medida { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--accent); }
-.cross-type-badge {
-  font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 10px;
-  font-family: var(--font-head); white-space: nowrap;
+.queima-title {
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.3px;
 }
-.ctb-exact  { background: var(--teal-dim);   color: var(--teal);   border: 1px solid rgba(79,195,161,0.3); }
-.ctb-cut    { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(126,184,247,0.3); }
-.ctb-excess { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(232,197,71,0.3); }
-.ctb-risk   { background: var(--danger-dim); color: var(--danger); border: 1px solid rgba(240,100,100,0.3); }
-
-.cross-body { padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 10px; }
-
-/* Cartão de espécie dentro do cross */
-.ce {
-  flex: 1; min-width: 200px;
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 10px 12px;
+.queima-subtitle { font-size: 12px; color: rgba(34,197,94,0.6); margin-top: 2px; }
+.queima-total {
+  font-family: var(--font-head);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--teal);
+  text-align: right;
 }
-.ce.excess  { border-color: rgba(79,195,161,0.35);  background: rgba(79,195,161,0.04); }
-.ce.lack    { border-color: rgba(240,100,100,0.35); background: rgba(240,100,100,0.04); }
-.ce.source  { border-color: rgba(126,184,247,0.35); background: rgba(126,184,247,0.04); }
-.ce.target  { border-color: rgba(240,100,100,0.35); background: rgba(240,100,100,0.04); }
-.ce.alert-excess { border-color: rgba(232,197,71,0.35);  background: rgba(232,197,71,0.04); }
-.ce.alert-risk   { border-color: rgba(240,100,100,0.35); background: rgba(240,100,100,0.04); }
+.queima-total-label { font-size: 10px; color: var(--muted); text-align: right; }
 
-.ce-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-.ce-row  { display: flex; justify-content: space-between; margin-top: 4px; font-size: 11px; color: var(--muted); }
-.ce-row span:last-child { color: var(--text); font-weight: 500; }
-.ce-tip  { margin-top: 8px; padding: 5px 8px; border-radius: 5px; font-size: 10px; line-height: 1.4; }
-.ce-tip.ok     { background: var(--teal-dim);   color: var(--teal);   border: 1px solid rgba(79,195,161,0.2); }
-.ce-tip.bad    { background: var(--danger-dim); color: var(--danger); border: 1px solid rgba(240,100,100,0.2); }
-.ce-tip.info   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(126,184,247,0.2); }
-.ce-tip.warn   { background: var(--warn-dim);   color: var(--warn);   border: 1px solid rgba(240,160,96,0.2); }
-.ce-tip.accent { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(232,197,71,0.2); }
-
-/* Seta de corte entre cards */
-.cut-arrow {
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 4px;
-  padding: 8px 4px; color: var(--blue); font-size: 18px;
-  min-width: 28px;
+/* Seção por medida */
+.medida-section { margin-bottom: 32px; }
+.medida-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--surface2);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 10px 10px 0 0;
+  border-bottom: none;
+  flex-wrap: wrap;
 }
-.cut-arrow span { font-size: 9px; color: var(--muted); white-space: nowrap; text-align: center; }
+.medida-rank {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 32px;
+}
+.medida-nome {
+  font-family: var(--font-head);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+.medida-dims { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.medida-estoque {
+  margin-left: auto;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.medida-estoque-val {
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--teal);
+}
+.medida-estoque-label { font-size: 10px; color: var(--muted); }
 
-/* Contador no subtab */
-.subtab-count {
-  display: inline-block; background: var(--surface2); border-radius: 10px;
-  padding: 1px 6px; font-size: 10px; margin-left: 4px;
+/* Grid de cards SKU — cards maiores (~20%) */
+.sku-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0;
+  border: 1px solid rgba(34,197,94,0.2);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
 }
 
-.placeholder { text-align: center; padding: 50px 20px; color: var(--muted); }
-.placeholder .ico { font-size: 32px; opacity: 0.35; margin-bottom: 10px; }
-.loading { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 50px 20px; color: var(--muted); }
-.spinner { width: 16px; height: 16px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+/* Card individual de SKU */
+.sku-card {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.15s;
+  cursor: default;
+}
+.sku-card:hover { background: var(--surface2); }
 
+/* Imagem do produto */
+.sku-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.sku-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s;
+}
+.sku-img.loading { opacity: 0; }
+.sku-img.loaded  { opacity: 1; }
+.sku-img-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted2);
+  font-size: 12px;
+}
+.sku-img-placeholder .ico { font-size: 32px; opacity: 0.25; }
+
+/* Badge EXCESSO — verde corporativo */
+.queima-badge {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  background: var(--accent);
+  color: #061a0e;
+  font-family: var(--font-head);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 10px 3px 7px;
+  border-radius: 0 5px 5px 0;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* Corpo do card — padding maior */
+.sku-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.sku-ref {
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.sku-especie { font-size: 12px; color: var(--muted); }
+.sku-medida  { font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 2px; }
+
+.sku-stats { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+.sku-stat-row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+.sku-stat-label { color: var(--muted); }
+.sku-stat-val   { font-weight: 600; color: var(--text); }
+.sku-stat-val.green  { color: var(--teal); }
+.sku-stat-val.orange { color: var(--warn); }
+.sku-stat-val.red    { color: var(--danger); }
+
+/* Divisor entre estoque e demanda */
+.sku-divider {
+  border: none;
+  border-top: 1px solid var(--border2);
+  margin: 4px 0;
+}
+
+/* Rodapé do card */
+.sku-footer {
+  padding: 8px 14px 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+.sku-saida {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* Loading / placeholder */
+.queima-loading { text-align:center; padding:60px 20px; color:var(--muted); }
+.queima-loading .spinner { margin:0 auto 12px; }
+
+/* Placeholder queima */
+.placeholder { text-align:center; padding:50px 20px; color:var(--muted); }
+.placeholder .ico { font-size:32px; opacity:0.35; margin-bottom:10px; }
+.loading { display:flex; align-items:center; justify-content:center; gap:10px; padding:50px 20px; color:var(--muted); }
+.spinner { width:16px; height:16px; border:2px solid var(--border2); border-top-color:var(--accent); border-radius:50%; animation:spin 0.7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
 @media (max-width: 600px) {
-  .wrap { padding: 16px 12px; }
-  .cards { grid-template-columns: repeat(2, 1fr); }
+  .wrap { padding:16px 12px; }
+  .summary-cards { grid-template-columns:repeat(2,1fr); }
+  .sku-grid { grid-template-columns:repeat(2,1fr); }
 }
 </style>
 </head>
@@ -207,7 +371,7 @@ tbody tr:last-child td { border-bottom: none; }
 
   <div class="header">
     <div>
-      <h1>Estoque <span>Painéis</span></h1>
+      <h1><span style="color:#22c55e;">Avides</span> Estoque de Painéis</h1>
       <p id="last-update">Conecte a planilha para carregar os dados</p>
     </div>
   </div>
@@ -233,19 +397,20 @@ tbody tr:last-child td { border-bottom: none; }
     <select id="f-medida" onchange="applyFilters()"><option value="">Todas as medidas</option></select>
   </div>
 
-  <div class="cards">
-    <div class="card c-accent"><div class="card-label">Espécies</div><div class="card-value" id="c-especies">—</div><div class="card-sub">tipos distintos</div></div>
-    <div class="card"><div class="card-label">Grupos</div><div class="card-value" id="c-grupos">—</div><div class="card-sub">grupos mestre</div></div>
-    <div class="card c-teal"><div class="card-label">Estoque PCP</div><div class="card-value" id="c-pcp">—</div><div class="card-sub">confiável</div></div>
-    <div class="card c-warn"><div class="card-label">Est. Compras</div><div class="card-value" id="c-comp">—</div><div class="card-sub">⚠ não confiável</div></div>
-    <div class="card c-danger"><div class="card-label">Em Falta</div><div class="card-value" id="c-falta">—</div><div class="card-sub">grupos com falta</div></div>
-    <div class="card c-teal"><div class="card-label">Com Excesso</div><div class="card-value" id="c-excesso">—</div><div class="card-sub">grupos com excesso</div></div>
+  <div class="summary-cards">
+    <div class="scard c-accent"><div class="scard-label">Espécies</div><div class="scard-value" id="c-especies">—</div><div class="scard-sub">tipos distintos</div></div>
+    <div class="scard"><div class="scard-label">Grupos</div><div class="scard-value" id="c-grupos">—</div><div class="scard-sub">grupos mestre</div></div>
+    <div class="scard c-teal"><div class="scard-label">Estoque PCP</div><div class="scard-value" id="c-pcp">—</div><div class="scard-sub">confiável (m³)</div></div>
+    <div class="scard c-warn"><div class="scard-label">Est. Compras</div><div class="scard-value" id="c-comp">—</div><div class="scard-sub">⚠ não confiável (m³)</div></div>
+    <div class="scard c-danger"><div class="scard-label">Em Falta</div><div class="scard-value" id="c-falta">—</div><div class="scard-sub">grupos com falta</div></div>
+    <div class="scard c-teal"><div class="scard-label">Com Excesso</div><div class="scard-value" id="c-excesso">—</div><div class="scard-sub">grupos com excesso</div></div>
   </div>
 
   <div class="tabs">
     <div class="tab active" onclick="switchTab('grafico')">Gráficos</div>
     <div class="tab" onclick="switchTab('tabela')">Por Espécie · Grupo · Medida</div>
     <div class="tab" onclick="switchTab('cross')">Substituição por Medida</div>
+    <div class="tab tab-fire" onclick="switchTab('queima')">↑ Excesso de Estoque</div>
   </div>
 
   <!-- TAB GRÁFICOS -->
@@ -273,8 +438,9 @@ tbody tr:last-child td { border-bottom: none; }
             <tr>
               <th>Espécie</th><th>Grupo Mestre</th><th>Padrão</th><th>Medida Mestre</th>
               <th>Comp</th><th>Larg</th><th>Esp</th><th>Status</th>
-              <th>Est. PCP ✓</th><th>Est. Compras ⚠</th>
-              <th>Falta Atual</th><th>Falta Seg</th><th>Total Atual</th>
+              <th>Est. PCP ✓ (m³)</th><th>Est. Compras ⚠ (m³)</th>
+              <th>Falta Atual (m³)</th><th>Falta Seg (m³)</th><th>Total Atual (m³)</th>
+              <th>Saída 6m (m³)</th>
               <th>SKUs Produzíveis</th>
             </tr>
           </thead>
@@ -286,98 +452,125 @@ tbody tr:last-child td { border-bottom: none; }
 
   <!-- TAB SUBSTITUIÇÃO -->
   <div class="section" id="tab-cross">
-
-    <!-- Subtabs -->
     <div class="subtabs">
-      <div class="subtab active-exact" id="st-exact"  onclick="switchSubtab('exact')">
-        ⇄ Mesma Medida <span class="subtab-count" id="cnt-exact">0</span>
-      </div>
-      <div class="subtab" id="st-cut" onclick="switchSubtab('cut')">
-        ✂ Corte: maior → menor <span class="subtab-count" id="cnt-cut">0</span>
-      </div>
-      <div class="subtab" id="st-excess" onclick="switchSubtab('excess')">
-        ↑ Excessos sem par <span class="subtab-count" id="cnt-excess">0</span>
-      </div>
-      <div class="subtab" id="st-risk" onclick="switchSubtab('risk')">
-        ⚠ Em risco sem par <span class="subtab-count" id="cnt-risk">0</span>
-      </div>
+      <div class="subtab active-exact" id="st-exact"  onclick="switchSubtab('exact')">⇄ Mesma Medida <span class="subtab-count" id="cnt-exact">0</span></div>
+      <div class="subtab" id="st-cut"   onclick="switchSubtab('cut')">✂ Corte: maior → menor <span class="subtab-count" id="cnt-cut">0</span></div>
+      <div class="subtab" id="st-excess" onclick="switchSubtab('excess')">↑ Excessos sem par <span class="subtab-count" id="cnt-excess">0</span></div>
+      <div class="subtab" id="st-risk"  onclick="switchSubtab('risk')">⚠ Em risco sem par <span class="subtab-count" id="cnt-risk">0</span></div>
     </div>
-
-    <!-- Legenda contextual -->
     <div class="cross-legend" id="cross-legend"></div>
+    <div id="cross-grid"><div class="placeholder"><div class="ico">🔀</div><p>Carregue os dados para ver oportunidades de substituição</p></div></div>
+  </div>
 
-    <!-- Grid de cards (muda conforme subtab) -->
-    <div id="cross-grid">
-      <div class="placeholder"><div class="ico">🔀</div><p>Carregue os dados para ver oportunidades de substituição</p></div>
+  <!-- TAB QUEIMA -->
+  <div class="section" id="tab-queima">
+    <div id="queima-content">
+      <div class="placeholder"><div class="ico">🔥</div><p>Carregue os dados para ver a queima de estoque</p></div>
     </div>
-
   </div>
 
 </div>
-
 <script>
-// ── COLUNAS (0-based) ────────────────────────────────────────
+// ── COLUNAS CONSOLIDADO_ESTOQUE (0-based) ────────────────────
 const C = {
   especie:0, grupoOrig:1, grupoMestre:2, padrao:3,
   compr:4, larg:5, esp:6, status:7,
   estComp:8, estPCP:9, faltaAtual:10, faltaSeg:11,
-  totalAtual:12, totalSeg:13, refInd:14, refAgrup:15, medida:16
+  totalAtual:12, totalSeg:13, refInd:14, refAgrup:15, medida:16,
+  saidaSemestral:18,  // col S
+  demandaTotal:19,    // col T
+  precoMedio:39,      // col AN
+  cpvMedio:40,        // col AO
+  margemMedia:41      // col AP
 };
+// ── COLUNAS pcp440 (0-based) ─────────────────────────────────
+const PCP = { ref:0, saidaVol:37 }; // col A=0, col AL=37
 
 let allRows=[], grouped=[], filtered=[];
+let pcpMap = new Map();   // ref → volume saída pcp440
 let ch1=null, ch2=null;
-let currentSubtab = 'exact';
+let currentSubtab='exact';
 
 // ── HELPERS ─────────────────────────────────────────────────
 const cl  = v => (v||'').replace(/^"|"$/g,'').trim();
 const num = v => { const n=parseFloat(cl(v).replace(/\./g,'').replace(',','.')); return isNaN(n)?0:n; };
 const fmt = n => n ? n.toLocaleString('pt-BR',{maximumFractionDigits:0}) : '0';
+const fmtVol = n => n ? n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '0,00';
+const fmtBRL = n => n ? 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+const fmtPct = n => n ? n.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%' : '—';
+const margemColor = p => p>=40?'var(--teal)':p>=20?'var(--warn)':'var(--danger)';
 const hasDigit = g => /\d/.test(g||'');
 
 function splitLine(line) {
   const r=[]; let cur='', q=false;
   for(let i=0;i<line.length;i++){
     const c=line[i];
-    if(c==='"'){q=!q;}
-    else if(c===','&&!q){r.push(cur.trim());cur='';}
-    else{cur+=c;}
+    if(c==='"'){q=!q;} else if(c===','&&!q){r.push(cur.trim());cur='';} else{cur+=c;}
   }
-  r.push(cur.trim());
-  return r;
+  r.push(cur.trim()); return r;
 }
-function extractId(url) { const m=url.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/); return m?m[1]:null; }
+function extractId(url){ const m=url.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/); return m?m[1]:null; }
 function extractGid(url){ const m=url.match(/gid=(\d+)/); return m?m[1]:'0'; }
 function setStatus(msg,cls=''){ const el=document.getElementById('status-msg'); el.textContent=msg; el.className=cls; }
 
-// ── LOAD ────────────────────────────────────────────────────
+// ── LOAD PRINCIPAL ───────────────────────────────────────────
 async function loadSheet() {
   const url=document.getElementById('sheet-url').value.trim();
-  const id=extractId(url);
-  if(!id){setStatus('Link inválido','err');return;}
+  const id=extractId(url); if(!id){setStatus('Link inválido','err');return;}
   const gid=extractGid(url);
   setStatus('Conectando...','');
-  document.getElementById('tbody').innerHTML='<tr><td colspan="14"><div class="loading"><div class="spinner"></div>Buscando dados...</div></td></tr>';
+  document.getElementById('tbody').innerHTML='<tr><td colspan="15"><div class="loading"><div class="spinner"></div>Buscando dados...</div></td></tr>';
+
   try {
+    // Busca aba principal
     const res=await fetch(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&gid=${gid}`);
-    if(!res.ok) throw new Error('HTTP '+res.status);
+    if(!res.ok) throw new Error('http'+res.status);
     const text=await res.text();
-    if(text.startsWith('<!DOCTYPE')) throw new Error('PRIVATE_SHEET');
+    if(text.startsWith('<!DOCTYPE')) throw new Error('PRIVATE');
+
+    // Busca aba pcp440 em paralelo
+    const resPcp=await fetch(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=pcp440`);
+    if(resPcp.ok){
+      const txtPcp=await resPcp.text();
+      parsePcp440(txtPcp);
+    }
+
     parseData(text);
   } catch(e) {
     try {
       const proxy='https://api.allorigins.win/raw?url=';
       const su=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&gid=${gid}`;
       const r2=await fetch(proxy+encodeURIComponent(su));
-      if(!r2.ok) throw new Error('PROXY_FAIL');
+      if(!r2.ok) throw new Error('PROXY');
       parseData(await r2.text());
+      // tenta pcp440 via proxy
+      try {
+        const su2=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=pcp440`;
+        const r3=await fetch(proxy+encodeURIComponent(su2));
+        if(r3.ok) parsePcp440(await r3.text());
+      } catch(_){}
     } catch(e2){
       setStatus('Erro: Verifique se a planilha está pública','err');
-      document.getElementById('tbody').innerHTML='<tr><td colspan="14"><div class="placeholder"><div class="ico">⚠</div><p>Não foi possível carregar.</p></div></td></tr>';
     }
   }
 }
 
-// ── PARSE ───────────────────────────────────────────────────
+// ── PARSE PCP440 ─────────────────────────────────────────────
+// Col A = referência, Col AL (índice 37) = volume saída
+function parsePcp440(text) {
+  pcpMap.clear();
+  const lines=text.trim().split('\n');
+  for(let i=1;i<lines.length;i++){
+    const cols=splitLine(lines[i]);
+    const ref=cl(cols[PCP.ref]);
+    const vol=num(cols[PCP.saidaVol]);
+    if(!ref) continue;
+    // acumula caso ref apareça mais de uma vez
+    pcpMap.set(ref, (pcpMap.get(ref)||0) + vol);
+  }
+}
+
+// ── PARSE PRINCIPAL ──────────────────────────────────────────
 function parseData(text) {
   const lines=text.trim().split('\n');
   allRows=[];
@@ -391,9 +584,7 @@ function parseData(text) {
   if(!allRows.length){setStatus('Planilha vazia ou colunas erradas','err');return;}
   setStatus(`${allRows.length} linhas carregadas ✓`,'ok');
   document.getElementById('last-update').textContent='Atualizado: '+new Date().toLocaleString('pt-BR');
-  buildGrouped();
-  fillFilters();
-  applyFilters();
+  buildGrouped(); fillFilters(); applyFilters();
 }
 
 // ── AGRUPAMENTO ─────────────────────────────────────────────
@@ -414,15 +605,23 @@ function buildGrouped() {
         comprN:0, largN:0, espN:0,
         statuses:[], estPCP:0, estComp:0,
         faltaAtual:0, faltaSeg:0, totalAtual:0,
+        saidaSemestral:0,
+        demandaTotal:0,
+        precoMedio:0, cpvMedio:0, margemMedia:0, _finCount:0,
         refs:new Set(), refsAgrup:new Set()
       });
     }
     const g=map.get(key);
-    g.estPCP    +=num(row[C.estPCP]);
-    g.estComp   +=num(row[C.estComp]);
-    g.faltaAtual+=num(row[C.faltaAtual]);
-    g.faltaSeg  +=num(row[C.faltaSeg]);
-    g.totalAtual+=num(row[C.totalAtual]);
+    g.estPCP         +=num(row[C.estPCP]);
+    g.estComp        +=num(row[C.estComp]);
+    g.faltaAtual     +=num(row[C.faltaAtual]);
+    g.faltaSeg       +=num(row[C.faltaSeg]);
+    g.totalAtual     +=num(row[C.totalAtual]);
+    g.saidaSemestral +=num(row[C.saidaSemestral]);
+    g.demandaTotal   +=num(row[C.demandaTotal]);
+    // financeiro: acumula para calcular média depois
+    const p=num(row[C.precoMedio]), cv=num(row[C.cpvMedio]), mg=num(row[C.margemMedia]);
+    if(p||cv||mg){ g.precoMedio+=p; g.cpvMedio+=cv; g.margemMedia+=mg; g._finCount++; }
     const st=cl(row[C.status]);
     if(hasDigit(go)&&st&&st!=='-'&&st!=='—') g.statuses.push(st);
     if(hasDigit(go)){
@@ -438,10 +637,14 @@ function buildGrouped() {
     const uniq=[...new Set(g.statuses)];
     g.statusFinal=uniq.length===0?'—':uniq.join(' / ');
     g.refs=[...g.refs]; g.refsAgrup=[...g.refsAgrup];
-    // dimensões numéricas para comparação de corte
     g.comprN=parseInt(g.compr)||0;
     g.largN =parseInt(g.larg)||0;
     g.espN  =parseInt(g.esp)||0;
+    if(g._finCount>0){
+      g.precoMedio  = g.precoMedio  / g._finCount;
+      g.cpvMedio    = g.cpvMedio    / g._finCount;
+      g.margemMedia = g.margemMedia / g._finCount;
+    }
     return g;
   });
 }
@@ -472,13 +675,10 @@ function applyFilters(){
     }
     return true;
   });
-  renderCards();
-  renderCharts();
-  renderTable();
-  renderCross();
+  renderCards(); renderCharts(); renderTable(); renderCross(); renderQueima();
 }
 
-// ── CARDS ───────────────────────────────────────────────────
+// ── CARDS RESUMO ─────────────────────────────────────────────
 function renderCards(){
   document.getElementById('c-especies').textContent=new Set(filtered.map(g=>g.especie)).size;
   document.getElementById('c-grupos').textContent  =new Set(filtered.map(g=>g.grupoMestre)).size;
@@ -493,9 +693,9 @@ function renderCharts(){
   const byEsp={};
   for(const g of filtered){
     if(!byEsp[g.especie]) byEsp[g.especie]={pcp:0,comp:0,excesso:0,falta:0,total:0};
-    byEsp[g.especie].pcp   +=g.estPCP;
-    byEsp[g.especie].comp  +=g.estComp;
-    byEsp[g.especie].total +=1;
+    byEsp[g.especie].pcp  +=g.estPCP;
+    byEsp[g.especie].comp +=g.estComp;
+    byEsp[g.especie].total+=1;
     if(g.statusFinal.includes('Excesso')) byEsp[g.especie].excesso++;
     if(g.statusFinal.includes('Falta'))   byEsp[g.especie].falta++;
   }
@@ -503,8 +703,7 @@ function renderCharts(){
   const mono='DM Mono, monospace';
   if(ch1) ch1.destroy();
   ch1=new Chart(document.getElementById('ch1').getContext('2d'),{
-    type:'bar',
-    data:{labels,datasets:[
+    type:'bar',data:{labels,datasets:[
       {label:'Estoque PCP (confiável)',data:labels.map(l=>byEsp[l].pcp),backgroundColor:'rgba(79,195,161,0.65)',borderColor:'#4fc3a1',borderWidth:1,borderRadius:4},
       {label:'Estoque Compras ⚠',data:labels.map(l=>byEsp[l].comp),backgroundColor:'rgba(240,160,96,0.4)',borderColor:'#f0a060',borderWidth:1,borderRadius:4}
     ]},
@@ -515,8 +714,7 @@ function renderCharts(){
   });
   if(ch2) ch2.destroy();
   ch2=new Chart(document.getElementById('ch2').getContext('2d'),{
-    type:'bar',
-    data:{labels,datasets:[
+    type:'bar',data:{labels,datasets:[
       {label:'Excesso',data:labels.map(l=>byEsp[l].excesso),backgroundColor:'rgba(79,195,161,0.7)',borderRadius:4},
       {label:'Com Falta',data:labels.map(l=>byEsp[l].falta),backgroundColor:'rgba(240,100,100,0.7)',borderRadius:4},
       {label:'Normal',data:labels.map(l=>byEsp[l].total-byEsp[l].excesso-byEsp[l].falta),backgroundColor:'rgba(122,132,148,0.4)',borderRadius:4}
@@ -542,7 +740,7 @@ function badge(st){
 function renderTable(){
   const tbody=document.getElementById('tbody');
   document.getElementById('tbl-count').textContent=`${filtered.length} grupos`;
-  if(!filtered.length){tbody.innerHTML='<tr><td colspan="14"><div class="placeholder"><div class="ico">🔍</div><p>Nenhum resultado</p></div></td></tr>';return;}
+  if(!filtered.length){tbody.innerHTML='<tr><td colspan="15"><div class="placeholder"><div class="ico">🔍</div><p>Nenhum resultado</p></div></td></tr>';return;}
   const sorted=[...filtered].sort((a,b)=>a.especie.localeCompare(b.especie)||a.grupoMestre.localeCompare(b.grupoMestre)||a.medida.localeCompare(b.medida));
   let html='';
   for(const g of sorted){
@@ -551,13 +749,16 @@ function renderTable(){
     html+=`<tr>
       <td><strong>${g.especie}</strong></td><td>${g.grupoMestre}</td><td>${g.padrao||'—'}</td>
       <td style="color:var(--accent);font-weight:500">${g.medida||'—'}</td>
-      <td style="text-align:right">${g.compr||'—'}</td><td style="text-align:right">${g.larg||'—'}</td><td style="text-align:right">${g.esp||'—'}</td>
+      <td style="text-align:right">${g.compr||'—'}</td>
+      <td style="text-align:right">${g.larg||'—'}</td>
+      <td style="text-align:right">${g.esp||'—'}</td>
       <td>${badge(g.statusFinal)}</td>
-      <td style="text-align:right;color:var(--teal)">${fmt(g.estPCP)}</td>
-      <td style="text-align:right"><span style="color:var(--warn)">${fmt(g.estComp)}</span><span class="b-warn-sm">⚠</span></td>
-      <td style="text-align:right;color:${g.faltaAtual>0?'var(--danger)':'var(--muted)'}">${fmt(g.faltaAtual)}</td>
-      <td style="text-align:right;color:${g.faltaSeg>0?'var(--warn)':'var(--muted)'}">${fmt(g.faltaSeg)}</td>
-      <td style="text-align:right">${fmt(g.totalAtual)}</td>
+      <td style="text-align:right;color:var(--teal)">${fmt(g.estPCP)} m³</td>
+      <td style="text-align:right"><span style="color:var(--warn)">${fmt(g.estComp)} m³</span><span class="b-warn-sm">⚠</span></td>
+      <td style="text-align:right;color:${g.faltaAtual>0?'var(--danger)':'var(--muted)'}">${fmt(g.faltaAtual)} m³</td>
+      <td style="text-align:right;color:${g.faltaSeg>0?'var(--warn)':'var(--muted)'}">${fmt(g.faltaSeg)} m³</td>
+      <td style="text-align:right">${fmt(g.totalAtual)} m³</td>
+      <td style="text-align:right;color:var(--blue)">${fmtVol(g.saidaSemestral)} m³</td>
       <td>${skuHtml}</td>
     </tr>`;
   }
@@ -565,287 +766,318 @@ function renderTable(){
 }
 
 // ══════════════════════════════════════════════════════════════
-// ── LÓGICA DE SUBSTITUIÇÃO EXPANDIDA ─────────────────────────
+// ── QUEIMA DE ESTOQUE ─────────────────────────────────────────
 // ══════════════════════════════════════════════════════════════
 
-// Verifica se painel A (maior) pode gerar painel B (menor) por corte
-// Regra: mesma espessura, A.compr >= B.compr, A.larg >= B.larg, área de A >= área de B
-function canCut(source, target) {
-  if(!source.comprN||!source.largN||!target.comprN||!target.largN) return false;
-  if(source.espN !== target.espN) return false; // espessura tem que ser igual
-  if(source.comprN === target.comprN && source.largN === target.largN) return false; // mesma medida, não é corte
-  return source.comprN >= target.comprN && source.largN >= target.largN;
+function renderQueima() {
+  const el=document.getElementById('queima-content');
+
+  // Apenas grupos com status Excesso
+  const excessos=filtered.filter(g=>g.statusFinal.includes('Excesso'));
+  if(!excessos.length){
+    el.innerHTML='<div class="placeholder"><div class="ico">✅</div><p>Nenhum grupo em excesso nos filtros atuais</p></div>';
+    return;
+  }
+
+  // Agrupa por medida mestre, soma estPCP
+  const byMedida={};
+  for(const g of excessos){
+    if(!g.medida||g.medida==='Sem Medida') continue;
+    if(!byMedida[g.medida]) byMedida[g.medida]={medida:g.medida,estPCP:0,demandaTotal:0,grupos:[]};
+    byMedida[g.medida].estPCP      +=g.estPCP;
+    byMedida[g.medida].demandaTotal+=g.demandaTotal;
+    byMedida[g.medida].grupos.push(g);
+  }
+
+  // Top 5 por estPCP
+  const top5=Object.values(byMedida)
+    .sort((a,b)=>b.estPCP-a.estPCP)
+    .slice(0,5);
+
+  const totalExcesso=top5.reduce((s,m)=>s+m.estPCP,0);
+  const totalSkus=top5.reduce((s,m)=>s+m.grupos.reduce((ss,g)=>ss+g.refsAgrup.length,0),0);
+
+  const rankEmojis=['🥇','🥈','🥉','4️⃣','5️⃣'];
+
+  let html=`
+  <div class="queima-banner">
+    <div>
+      <div class="queima-title">↑ EXCESSO DE ESTOQUE — TOP 5 MEDIDAS</div>
+      <div class="queima-subtitle">Maiores volumes disponíveis · Prioridade para oferta ao comercial</div>
+    </div>
+    <div>
+      <div class="queima-total">${fmt(totalExcesso)} m³</div>
+      <div class="queima-total-label">total em excesso (top 5)</div>
+    </div>
+  </div>`;
+
+  for(let ri=0;ri<top5.length;ri++){
+    const medObj=top5[ri];
+
+    // Explode todas as referências agrupadas (col P) de todos os grupos em excesso dessa medida
+    // Cada ref → 1 card
+    const skuCards=[];
+    for(const g of medObj.grupos){
+      // split col P por vírgula ou ponto-e-vírgula
+      const refs=g.refsAgrup.length
+        ? g.refsAgrup
+        : g.refs; // fallback para individuais se agrupadas vazias
+      for(const ref of refs){
+        if(!ref) continue;
+        const volSaida=pcpMap.get(ref)||0;
+        skuCards.push({ref, grupo:g, volSaida, demandaTotal:g.demandaTotal});
+      }
+    }
+
+    // Dimensões da medida (pega do primeiro grupo)
+    const sample=medObj.grupos[0];
+    const dims=[sample.compr,sample.larg,sample.esp].filter(Boolean).join(' × ');
+
+    html+=`
+    <div class="medida-section">
+      <div class="medida-header">
+        <div class="medida-rank">${rankEmojis[ri]}</div>
+        <div>
+          <div class="medida-nome">${medObj.medida}</div>
+          ${dims?`<div class="medida-dims">${dims} mm · ${medObj.grupos.length} grupo(s) em excesso · ${skuCards.length} SKU(s)</div>`:''}
+        </div>
+        <div class="medida-estoque">
+          <div class="medida-estoque-val">${fmt(medObj.estPCP)} m³</div>
+          <div class="medida-estoque-label">estoque PCP disponível</div>
+          ${medObj.demandaTotal>0?`<div style="font-size:11px;color:var(--warn);font-weight:600;margin-top:3px">${fmt(medObj.demandaTotal)} m³ faltantes</div>`:''}
+        </div>
+      </div>
+      <div class="sku-grid">
+        ${skuCards.map(sc=>buildSkuCard(sc)).join('')}
+        ${skuCards.length===0?'<div style="padding:24px;color:var(--muted);font-size:12px">Nenhuma referência disponível nesta medida</div>':''}
+      </div>
+    </div>`;
+  }
+
+  el.innerHTML=html;
+
+  // Lazy-load imagens após inserir no DOM
+  el.querySelectorAll('.sku-img[data-src]').forEach(img=>{
+    const src=img.dataset.src;
+    const tmp=new Image();
+    tmp.onload=()=>{ img.src=src; img.classList.remove('loading'); img.classList.add('loaded'); img.nextElementSibling&&(img.nextElementSibling.style.display='none'); };
+    tmp.onerror=()=>{ img.style.display='none'; };
+    tmp.src=src;
+  });
 }
 
-function buildCrossData() {
-  const excesso = filtered.filter(g => g.statusFinal.includes('Excesso'));
-  const falta   = filtered.filter(g => g.statusFinal.includes('Falta'));
+function buildSkuCard(sc){
+  const {ref, grupo:g, volSaida, demandaTotal}=sc;
+  const imgUrl=`https://assets.tramontina.com.br/upload/tramon/imagens/BEL/${ref}PDM001G.jpg`;
+  const mgColor=g.margemMedia>0?margemColor(g.margemMedia):'var(--muted)';
 
-  // ── 1. MESMA MEDIDA ──────────────────────────────────────
-  const byMed = {};
+  return `
+  <div class="sku-card">
+    <div class="sku-img-wrap">
+      <img class="sku-img loading" data-src="${imgUrl}" src="" alt="SKU ${ref}"
+           onerror="this.style.display='none'">
+      <div class="sku-img-placeholder">
+        <div class="ico">🪵</div>
+        <span>${ref}</span>
+      </div>
+      <div class="queima-badge">↑ EXCESSO</div>
+    </div>
+    <div class="sku-body">
+      <div class="sku-ref">SKU: ${ref}</div>
+      <div class="sku-especie">${g.especie} · ${g.grupoMestre}</div>
+      <div class="sku-medida">${g.medida}</div>
+      <div class="sku-stats">
+        <div class="sku-stat-row">
+          <span class="sku-stat-label">Padrão</span>
+          <span class="sku-stat-val">${g.padrao||'—'}</span>
+        </div>
+        <div class="sku-stat-row">
+          <span class="sku-stat-label">Dimensões</span>
+          <span class="sku-stat-val">${[g.compr,g.larg,g.esp].filter(Boolean).join(' × ')} mm</span>
+        </div>
+        <div class="sku-stat-row">
+          <span class="sku-stat-label">Status</span>
+          <span class="sku-stat-val">${badge(g.statusFinal)}</span>
+        </div>
+        <hr class="sku-divider">
+        <div class="sku-stat-row">
+          <span class="sku-stat-label">Estoque PCP</span>
+          <span class="sku-stat-val green">${fmtVol(g.estPCP)} m³</span>
+        </div>
+        <div class="sku-stat-row">
+          <span class="sku-stat-label">Demanda faltante</span>
+          <span class="sku-stat-val ${demandaTotal>0?'red':'green'}">${demandaTotal>0?fmtVol(demandaTotal)+' m³':'—'}</span>
+        </div>
+        <hr class="sku-divider">
+        <div class="sku-stat-row">
+          <span class="sku-stat-label">Preço médio</span>
+          <span class="sku-stat-val">${fmtBRL(g.precoMedio)}<span style="font-size:9px;color:var(--muted);font-weight:400">/m³</span></span>
+        </div>
+        <div class="sku-stat-row">
+          <span class="sku-stat-label">CPV médio</span>
+          <span class="sku-stat-val">${fmtBRL(g.cpvMedio)}<span style="font-size:9px;color:var(--muted);font-weight:400">/m³</span></span>
+        </div>
+        <div class="sku-stat-row">
+          <span class="sku-stat-label">Margem média</span>
+          <span class="sku-stat-val" style="color:${mgColor}">${fmtPct(g.margemMedia)}</span>
+        </div>
+      </div>
+    </div>
+    <div class="sku-footer">
+      <div class="sku-saida">
+        📦 Saída 6m: <strong>${fmtVol(volSaida)} m³</strong>
+      </div>
+      <span style="color:var(--muted2);font-size:9px">pcp440</span>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// ── SUBSTITUIÇÃO (mantida igual) ──────────────────────────────
+// ══════════════════════════════════════════════════════════════
+function calcLoss(src,tgt){
+  const cS=src.comprN,lS=src.largN,eS=src.espN,cT=tgt.comprN,lT=tgt.largN,eT=tgt.espN;
+  if(!cS||!lS||!eS||!cT||!lT||!eT) return null;
+  const volSrc=(cS*lS*eS)/1e9, volTgt=(cT*lT*eT)/1e9;
+  const volLoss=volSrc-volTgt, pct=volSrc>0?(volLoss/volSrc)*100:0;
+  return{pct:Math.max(0,pct),volSrc:+volSrc.toFixed(4),volTgt:+volTgt.toFixed(4),volLoss:+Math.max(0,volLoss).toFixed(4),complexProcess:eT>eS};
+}
+function lossClass(pct){return pct<=20?'low':pct<=50?'medium':'high';}
+function renderLossBox(loss){
+  if(!loss) return`<div class="cut-arrow"><span style="font-size:22px">✂</span><span>cortar para</span></div>`;
+  const cls=lossClass(loss.pct),icon=loss.pct<=20?'✂':loss.pct<=50?'⚠':'🔥';
+  const barW=Math.min(100,loss.pct).toFixed(0);
+  const barColor=cls==='low'?'#4fc3a1':cls==='medium'?'#f0a060':'#f06464';
+  return`<div class="loss-box">
+    <div class="loss-icon">${icon}</div>
+    <div class="loss-label">Perda de volume</div>
+    <div class="loss-pct ${cls}">${loss.pct.toFixed(1)}%</div>
+    <div style="width:80px;height:4px;background:var(--border2);border-radius:2px;overflow:hidden;margin:2px 0">
+      <div style="width:${barW}%;height:100%;background:${barColor};border-radius:2px"></div>
+    </div>
+    <div class="loss-vol">${loss.volLoss.toFixed(3)} m³ perdidos</div>
+    <div class="loss-vol" style="font-size:9px;margin-top:1px">${loss.volSrc.toFixed(3)} → ${loss.volTgt.toFixed(3)} m³</div>
+    <div class="loss-arrow">↓</div>
+    <div style="font-size:9px;color:var(--muted)">cortar para</div>
+  </div>`;
+}
+function renderProcessAlert(loss){
+  if(!loss||!loss.complexProcess) return'';
+  return`<div class="process-alert">⚠️ <strong>Verificar processo de produção</strong><br>Destino tem espessura maior que a origem — requer colagem, prensagem ou processo adicional. Avaliar perdas extras e custos antes de confirmar.</div>`;
+}
+function canCut(s,t){
+  if(!s.comprN||!s.largN||!t.comprN||!t.largN) return false;
+  if(s.comprN===t.comprN&&s.largN===t.largN&&s.espN===t.espN) return false;
+  return s.comprN>=t.comprN&&s.largN>=t.largN;
+}
+function buildCrossData(){
+  const excesso=filtered.filter(g=>g.statusFinal.includes('Excesso'));
+  const falta  =filtered.filter(g=>g.statusFinal.includes('Falta'));
+  const byMed={};
   for(const g of filtered){
     if(!g.medida||g.medida==='Sem Medida') continue;
     if(!byMed[g.medida]) byMed[g.medida]=[];
     byMed[g.medida].push(g);
   }
-  const exactMedidas = Object.keys(byMed).sort().filter(m=>{
-    const rows=byMed[m];
-    return rows.some(r=>r.statusFinal.includes('Excesso')) && rows.some(r=>r.statusFinal.includes('Falta'));
-  });
-  const exactCards = exactMedidas.map(m=>({type:'exact', medida:m, rows:byMed[m]}));
-
-  // ── 2. CORTE: maior com excesso → menor em falta ─────────
-  const cutPairs = [];
-  const usedPairs = new Set();
-  for(const src of excesso){
-    for(const tgt of falta){
-      if(src.especie !== tgt.especie) continue; // mesma espécie (por ora)
-      if(!canCut(src, tgt)) continue;
-      const pkey = `${src.especie}||${src.grupoMestre}||${src.medida}→${tgt.medida}`;
-      if(usedPairs.has(pkey)) continue;
-      usedPairs.add(pkey);
-      cutPairs.push({type:'cut', source:src, target:tgt});
-    }
+  const exactCards=Object.keys(byMed).sort()
+    .filter(m=>byMed[m].some(r=>r.statusFinal.includes('Excesso'))&&byMed[m].some(r=>r.statusFinal.includes('Falta')))
+    .map(m=>({medida:m,rows:byMed[m]}));
+  const cutPairs=[];
+  const used=new Set();
+  const tryAdd=(src,tgt,cross)=>{
+    if(!canCut(src,tgt)) return;
+    const k=`${src.especie}||${src.grupoMestre}||${src.medida}→${tgt.especie}||${tgt.medida}`;
+    if(used.has(k)) return; used.add(k);
+    cutPairs.push({source:src,target:tgt,crossSpecies:cross,loss:calcLoss(src,tgt)});
+  };
+  for(const s of excesso) for(const t of falta){
+    if(s.especie===t.especie) tryAdd(s,t,false); else tryAdd(s,t,true);
   }
-  // também cruzamento entre espécies diferentes
-  for(const src of excesso){
-    for(const tgt of falta){
-      if(src.especie === tgt.especie) continue;
-      if(!canCut(src, tgt)) continue;
-      const pkey = `${src.especie}||${src.grupoMestre}||${src.medida}→${tgt.especie}||${tgt.medida}`;
-      if(usedPairs.has(pkey)) continue;
-      usedPairs.add(pkey);
-      cutPairs.push({type:'cut', source:src, target:tgt, crossSpecies:true});
-    }
-  }
-
-  // ── 3. EXCESSOS SEM PAR (nenhuma falta na mesma ou menor medida) ──
-  const excessSolo = excesso.filter(src=>{
-    const temExato = byMed[src.medida] && byMed[src.medida].some(r=>r.statusFinal.includes('Falta'));
-    const temCorte = falta.some(tgt=>canCut(src,tgt));
-    return !temExato && !temCorte;
-  });
-
-  // ── 4. FALTAS SEM PAR (nenhum excesso na mesma ou maior medida) ──
-  const riskSolo = falta.filter(tgt=>{
-    const temExato = byMed[tgt.medida] && byMed[tgt.medida].some(r=>r.statusFinal.includes('Excesso'));
-    const temCorte = excesso.some(src=>canCut(src,tgt));
-    return !temExato && !temCorte;
-  });
-
-  return { exactCards, cutPairs, excessSolo, riskSolo };
+  const excessSolo=excesso.filter(s=>!(byMed[s.medida]&&byMed[s.medida].some(r=>r.statusFinal.includes('Falta')))&&!falta.some(t=>canCut(s,t)));
+  const riskSolo  =falta.filter(t=>!(byMed[t.medida]&&byMed[t.medida].some(r=>r.statusFinal.includes('Excesso')))&&!excesso.some(s=>canCut(s,t)));
+  return{exactCards,cutPairs,excessSolo,riskSolo};
 }
-
-// ── RENDER CROSS ────────────────────────────────────────────
 function renderCross(){
-  const data = buildCrossData();
-
-  // Atualiza contadores nos subtabs
-  document.getElementById('cnt-exact').textContent  = data.exactCards.length;
-  document.getElementById('cnt-cut').textContent    = data.cutPairs.length;
-  document.getElementById('cnt-excess').textContent = data.excessSolo.length;
-  document.getElementById('cnt-risk').textContent   = data.riskSolo.length;
-
+  const data=buildCrossData();
+  document.getElementById('cnt-exact').textContent =data.exactCards.length;
+  document.getElementById('cnt-cut').textContent   =data.cutPairs.length;
+  document.getElementById('cnt-excess').textContent=data.excessSolo.length;
+  document.getElementById('cnt-risk').textContent  =data.riskSolo.length;
   renderSubtab(data);
 }
-
-function renderSubtab(data){
-  const grid = document.getElementById('cross-grid');
-  const legend = document.getElementById('cross-legend');
-
-  if(currentSubtab === 'exact'){
-    legend.innerHTML = `
-      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Espécie com Excesso — pode ser ofertada como substituta na mesma medida</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Espécie com Falta — demanda não atendida, buscar alternativa</div>`;
-    if(!data.exactCards.length){
-      grid.innerHTML='<div class="placeholder"><div class="ico">✅</div><p>Nenhuma medida com excesso e falta simultâneos nos filtros atuais</p></div>';
-      return;
-    }
-    let html='';
-    for(const item of data.exactCards){
-      const rows=item.rows;
-      const excess=rows.filter(r=>r.statusFinal.includes('Excesso'));
-      const lack  =rows.filter(r=>r.statusFinal.includes('Falta'));
-      const other =rows.filter(r=>!r.statusFinal.includes('Excesso')&&!r.statusFinal.includes('Falta'));
-      const sample=rows[0];
-      const dims=[sample.compr,sample.larg,sample.esp].filter(Boolean).join(' × ');
-      const cards=[
-        ...excess.map(g=>makeEspecieCard(g,'excess','↑ Pode ser ofertado como substituto na mesma medida','ok')),
-        ...lack.map(g=>makeEspecieCard(g,'lack','↓ Demanda não atendida — oferecer espécie com excesso acima','bad')),
-        ...other.map(g=>makeEspecieCard(g,'','',''))
-      ].join('');
-      html+=`<div class="cross-card">
-        <div class="cross-head">
-          <span class="cross-medida">${item.medida}</span>
-          ${dims?`<span style="color:var(--muted);font-size:12px">${dims} mm</span>`:''}
-          <span class="cross-type-badge ctb-exact">Mesma medida</span>
-          <span style="margin-left:auto;display:flex;gap:8px">
-            <span class="badge b-excess">${excess.length} excesso</span>
-            <span class="badge b-lack">${lack.length} falta</span>
-          </span>
-        </div>
-        <div class="cross-body">${cards}</div>
-      </div>`;
-    }
-    grid.innerHTML=html;
-
-  } else if(currentSubtab === 'cut'){
-    legend.innerHTML = `
-      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Origem — painel maior com excesso que pode ser cortado</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Destino — painel menor em falta que seria atendido pelo corte</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Cruzamento entre espécies diferentes (verificar viabilidade técnica)</div>`;
-    if(!data.cutPairs.length){
-      grid.innerHTML='<div class="placeholder"><div class="ico">✂</div><p>Nenhuma oportunidade de corte identificada nos filtros atuais</p></div>';
-      return;
-    }
-    let html='';
-    for(const pair of data.cutPairs){
-      const src=pair.source, tgt=pair.target;
-      const srcDims=[src.compr,src.larg,src.esp].filter(Boolean).join(' × ');
-      const tgtDims=[tgt.compr,tgt.larg,tgt.esp].filter(Boolean).join(' × ');
-      const isCross=pair.crossSpecies;
-      html+=`<div class="cross-card">
-        <div class="cross-head">
-          <span class="cross-medida">${src.medida}</span>
-          <span style="color:var(--muted);font-size:18px;margin:0 4px">→</span>
-          <span class="cross-medida" style="color:var(--blue)">${tgt.medida}</span>
-          <span class="cross-type-badge ${isCross?'ctb-excess':'ctb-cut'}">${isCross?'Entre espécies':'Corte'}</span>
-          <span style="margin-left:auto;font-size:11px;color:var(--muted)">esp. ${src.espN}mm</span>
-        </div>
-        <div class="cross-body" style="align-items:center">
-          <div class="ce source" style="flex:2">
-            <div class="ce-name">${src.especie} · ${src.grupoMestre}</div>
-            <div class="ce-row"><span>Medida</span><span>${src.medida}</span></div>
-            <div class="ce-row"><span>Dimensões</span><span>${srcDims} mm</span></div>
-            <div class="ce-row"><span>Status</span><span>${badge(src.statusFinal)}</span></div>
-            <div class="ce-row"><span>Est. PCP</span><span style="color:var(--teal)">${fmt(src.estPCP)}</span></div>
-            ${makeSkuHtml(src)}
-            <div class="ce-tip info">↑ Excesso disponível — candidato a corte para medida menor</div>
-          </div>
-          <div class="cut-arrow">
-            <span style="font-size:22px">✂</span>
-            <span>cortar para</span>
-          </div>
-          <div class="ce target" style="flex:2">
-            <div class="ce-name">${tgt.especie} · ${tgt.grupoMestre}</div>
-            <div class="ce-row"><span>Medida</span><span>${tgt.medida}</span></div>
-            <div class="ce-row"><span>Dimensões</span><span>${tgtDims} mm</span></div>
-            <div class="ce-row"><span>Status</span><span>${badge(tgt.statusFinal)}</span></div>
-            <div class="ce-row"><span>Falta Atual</span><span style="color:var(--danger)">${fmt(tgt.faltaAtual)}</span></div>
-            <div class="ce-row"><span>Falta Seg</span><span style="color:var(--warn)">${fmt(tgt.faltaSeg)}</span></div>
-            ${makeSkuHtml(tgt)}
-            <div class="ce-tip bad">↓ Em falta — pode ser atendido pelo corte do painel acima</div>
-            ${isCross?`<div class="ce-tip warn">⚠ Espécies diferentes — confirmar viabilidade com PCP</div>`:''}
-          </div>
-        </div>
-      </div>`;
-    }
-    grid.innerHTML=html;
-
-  } else if(currentSubtab === 'excess'){
-    legend.innerHTML = `
-      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Excesso sem demanda identificada — avaliar oferta comercial ativa ou reaproveitamento</div>`;
-    if(!data.excessSolo.length){
-      grid.innerHTML='<div class="placeholder"><div class="ico">✅</div><p>Todos os excessos já têm uma falta correspondente na mesma ou menor medida</p></div>';
-      return;
-    }
-    let html='<div style="display:flex;flex-wrap:wrap;gap:10px">';
-    for(const g of data.excessSolo){
-      const allRefs=[...new Set([...g.refs,...g.refsAgrup])].slice(0,8);
-      const skuHtml=allRefs.length?`<div class="sku-list" style="margin-top:6px">${allRefs.map(s=>`<span class="sku">${s}</span>`).join('')}</div>`:'';
-      html+=`<div class="ce alert-excess" style="min-width:220px;max-width:320px;flex:1">
-        <div class="ce-name">${g.especie} · ${g.grupoMestre}</div>
-        <div class="ce-row"><span>Medida</span><span style="color:var(--accent)">${g.medida}</span></div>
-        <div class="ce-row"><span>Dimensões</span><span>${[g.compr,g.larg,g.esp].filter(Boolean).join(' × ')} mm</span></div>
-        <div class="ce-row"><span>Status</span><span>${badge(g.statusFinal)}</span></div>
-        <div class="ce-row"><span>Est. PCP</span><span style="color:var(--teal)">${fmt(g.estPCP)}</span></div>
-        <div class="ce-row"><span>Padrão</span><span>${g.padrao||'—'}</span></div>
-        ${skuHtml}
-        <div class="ce-tip accent">↑ Excesso sem demanda identificada — oferecer ao comercial ou avaliar corte</div>
-      </div>`;
-    }
-    html+='</div>';
-    grid.innerHTML=html;
-
-  } else if(currentSubtab === 'risk'){
-    legend.innerHTML = `
-      <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Em falta sem nenhuma fonte de excesso identificada — risco real de desabastecimento</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--warn)"></div>Falta no mês seguinte — janela ainda aberta para ação preventiva</div>`;
-    if(!data.riskSolo.length){
-      grid.innerHTML='<div class="placeholder"><div class="ico">✅</div><p>Todas as faltas têm uma fonte de excesso identificada</p></div>';
-      return;
-    }
-    // Ordena: falta atual primeiro, depois falta seguinte
-    const sorted=[...data.riskSolo].sort((a,b)=>{
-      const aF=a.statusFinal.includes('Mês1')?0:1;
-      const bF=b.statusFinal.includes('Mês1')?0:1;
-      return aF-bF||b.faltaAtual-a.faltaAtual;
-    });
-    let html='<div style="display:flex;flex-wrap:wrap;gap:10px">';
-    for(const g of sorted){
-      const allRefs=[...new Set([...g.refs,...g.refsAgrup])].slice(0,8);
-      const skuHtml=allRefs.length?`<div class="sku-list" style="margin-top:6px">${allRefs.map(s=>`<span class="sku">${s}</span>`).join('')}</div>`:'';
-      const isMes1=g.statusFinal.includes('Mês1')||g.statusFinal.includes('Mes1');
-      html+=`<div class="ce alert-risk" style="min-width:220px;max-width:320px;flex:1">
-        <div class="ce-name">${g.especie} · ${g.grupoMestre}</div>
-        <div class="ce-row"><span>Medida</span><span style="color:var(--accent)">${g.medida}</span></div>
-        <div class="ce-row"><span>Dimensões</span><span>${[g.compr,g.larg,g.esp].filter(Boolean).join(' × ')} mm</span></div>
-        <div class="ce-row"><span>Status</span><span>${badge(g.statusFinal)}</span></div>
-        <div class="ce-row"><span>Est. PCP</span><span style="color:var(--teal)">${fmt(g.estPCP)}</span></div>
-        <div class="ce-row"><span>Falta Atual</span><span style="color:var(--danger)">${fmt(g.faltaAtual)}</span></div>
-        <div class="ce-row"><span>Falta Seg</span><span style="color:var(--warn)">${fmt(g.faltaSeg)}</span></div>
-        <div class="ce-row"><span>Padrão</span><span>${g.padrao||'—'}</span></div>
-        ${skuHtml}
-        <div class="ce-tip ${isMes1?'bad':'warn'}">
-          ${isMes1?'🚨 Falta iminente — sem fonte de excesso identificada. Ação urgente necessária.'
-                   :'⚠ Risco no próximo mês — sem par de excesso disponível. Planejar reposição.'}
-        </div>
-      </div>`;
-    }
-    html+='</div>';
-    grid.innerHTML=html;
-  }
-}
-
-// ── CARD DE ESPÉCIE (usado em mesma medida) ──────────────────
-function makeEspecieCard(g, cls, tipText, tipCls){
+function makeEspecieCard(g,cls,tipText,tipCls){
   const allRefs=[...new Set([...g.refs,...g.refsAgrup])].slice(0,8);
   const skuHtml=allRefs.length?`<div class="sku-list" style="margin-top:6px">${allRefs.map(s=>`<span class="sku">${s}</span>`).join('')}</div>`:'';
   const tip=tipText?`<div class="ce-tip ${tipCls}">${tipText}</div>`:'';
-  return `<div class="ce ${cls}">
-    <div class="ce-name">${g.especie} · ${g.grupoMestre}</div>
+  return`<div class="ce ${cls}"><div class="ce-name">${g.especie} · ${g.grupoMestre}</div>
     <div class="ce-row"><span>Padrão</span><span>${g.padrao||'—'}</span></div>
     <div class="ce-row"><span>Status</span><span>${badge(g.statusFinal)}</span></div>
-    <div class="ce-row"><span>Est. PCP</span><span style="color:var(--teal)">${fmt(g.estPCP)}</span></div>
-    <div class="ce-row"><span>Falta Atual</span><span style="color:${g.faltaAtual>0?'var(--danger)':'var(--muted)'}">${fmt(g.faltaAtual)}</span></div>
-    ${skuHtml}${tip}
-  </div>`;
+    <div class="ce-row"><span>Est. PCP</span><span style="color:var(--teal)">${fmt(g.estPCP)} m³</span></div>
+    <div class="ce-row"><span>Falta Atual</span><span style="color:${g.faltaAtual>0?'var(--danger)':'var(--muted)'}">${fmt(g.faltaAtual)} m³</span></div>
+    ${skuHtml}${tip}</div>`;
 }
-
 function makeSkuHtml(g){
-  const allRefs=[...new Set([...g.refs,...g.refsAgrup])].slice(0,6);
-  return allRefs.length?`<div class="sku-list" style="margin-top:6px">${allRefs.map(s=>`<span class="sku">${s}</span>`).join('')}</div>`:'';
+  const r=[...new Set([...g.refs,...g.refsAgrup])].slice(0,6);
+  return r.length?`<div class="sku-list" style="margin-top:6px">${r.map(s=>`<span class="sku">${s}</span>`).join('')}</div>`:'';
 }
-
-// ── SUBTABS ─────────────────────────────────────────────────
+function renderSubtab(data){
+  const grid=document.getElementById('cross-grid');
+  const legend=document.getElementById('cross-legend');
+  if(currentSubtab==='exact'){
+    legend.innerHTML=`<div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Excesso — pode ser ofertado como substituto</div><div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Falta — demanda não atendida</div>`;
+    if(!data.exactCards.length){grid.innerHTML='<div class="placeholder"><div class="ico">✅</div><p>Nenhuma medida com excesso e falta simultâneos</p></div>';return;}
+    grid.innerHTML=data.exactCards.map(item=>{
+      const excess=item.rows.filter(r=>r.statusFinal.includes('Excesso'));
+      const lack  =item.rows.filter(r=>r.statusFinal.includes('Falta'));
+      const other =item.rows.filter(r=>!r.statusFinal.includes('Excesso')&&!r.statusFinal.includes('Falta'));
+      const s=item.rows[0];
+      const dims=[s.compr,s.larg,s.esp].filter(Boolean).join(' × ');
+      const cards=[...excess.map(g=>makeEspecieCard(g,'excess','↑ Pode ser ofertado como substituto','ok')),...lack.map(g=>makeEspecieCard(g,'lack','↓ Demanda não atendida','bad')),...other.map(g=>makeEspecieCard(g,'','',''))].join('');
+      return`<div class="cross-card"><div class="cross-head"><span class="cross-medida">${item.medida}</span>${dims?`<span style="color:var(--muted);font-size:12px">${dims} mm</span>`:''}<span class="cross-type-badge ctb-exact">Mesma medida</span><span style="margin-left:auto;display:flex;gap:8px"><span class="badge b-excess">${excess.length} excesso</span><span class="badge b-lack">${lack.length} falta</span></span></div><div class="cross-body">${cards}</div></div>`;
+    }).join('');
+  } else if(currentSubtab==='cut'){
+    legend.innerHTML=`<div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Origem (excesso)</div><div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Destino (falta)</div><div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Perda ≤20%</div><div class="legend-item"><div class="legend-dot" style="background:var(--warn)"></div>Perda 20–50%</div><div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Perda >50%</div>`;
+    if(!data.cutPairs.length){grid.innerHTML='<div class="placeholder"><div class="ico">✂</div><p>Nenhuma oportunidade de transformação</p></div>';return;}
+    const sorted=[...data.cutPairs].sort((a,b)=>(a.loss?a.loss.pct:99)-(b.loss?b.loss.pct:99));
+    grid.innerHTML=sorted.map(pair=>{
+      const{source:src,target:tgt,loss}=pair;
+      const srcD=[src.compr,src.larg,src.esp].filter(Boolean).join(' × ');
+      const tgtD=[tgt.compr,tgt.larg,tgt.esp].filter(Boolean).join(' × ');
+      const lossHC=loss?lossClass(loss.pct):'';
+      const lossColor=lossHC==='low'?'var(--teal)':lossHC==='medium'?'var(--warn)':'var(--danger)';
+      return`<div class="cross-card"><div class="cross-head"><span class="cross-medida">${src.medida}</span><span style="color:var(--muted);font-size:18px;margin:0 4px">→</span><span class="cross-medida" style="color:var(--blue)">${tgt.medida}</span><span class="cross-type-badge ${pair.crossSpecies?'ctb-excess':'ctb-cut'}">${pair.crossSpecies?'Entre espécies':'Corte'}</span>${loss&&loss.complexProcess?`<span class="cross-type-badge" style="background:rgba(176,126,247,0.1);color:var(--purple);border:1px solid rgba(176,126,247,0.3);margin-left:4px">Processo complexo</span>`:''}<span style="margin-left:auto;font-size:11px;color:${lossColor};font-weight:600">${loss?loss.pct.toFixed(1)+'% perda':'—'}</span></div><div class="cross-body" style="align-items:flex-start"><div class="ce source" style="flex:2"><div class="ce-name">${src.especie} · ${src.grupoMestre}</div><div class="ce-row"><span>Medida</span><span>${src.medida}</span></div><div class="ce-row"><span>Dimensões</span><span>${srcD} mm</span></div><div class="ce-row"><span>Status</span><span>${badge(src.statusFinal)}</span></div><div class="ce-row"><span>Est. PCP</span><span style="color:var(--teal)">${fmt(src.estPCP)} m³</span></div>${loss?`<div class="ce-row"><span>Volume</span><span style="color:var(--muted)">${loss.volSrc.toFixed(4)} m³/un</span></div>`:''} ${makeSkuHtml(src)}<div class="ce-tip info">↑ Excesso disponível</div></div>${renderLossBox(loss)}<div class="ce target" style="flex:2"><div class="ce-name">${tgt.especie} · ${tgt.grupoMestre}</div><div class="ce-row"><span>Medida</span><span>${tgt.medida}</span></div><div class="ce-row"><span>Dimensões</span><span>${tgtD} mm</span></div><div class="ce-row"><span>Status</span><span>${badge(tgt.statusFinal)}</span></div><div class="ce-row"><span>Falta Atual</span><span style="color:var(--danger)">${fmt(tgt.faltaAtual)} m³</span></div><div class="ce-row"><span>Falta Seg</span><span style="color:var(--warn)">${fmt(tgt.faltaSeg)} m³</span></div>${loss?`<div class="ce-row"><span>Volume</span><span style="color:var(--muted)">${loss.volTgt.toFixed(4)} m³/un</span></div>`:''} ${makeSkuHtml(tgt)}<div class="ce-tip bad">↓ Em falta</div>${pair.crossSpecies?`<div class="ce-tip warn">⚠ Espécies diferentes — confirmar com PCP</div>`:''} ${renderProcessAlert(loss)}</div></div></div>`;
+    }).join('');
+  } else if(currentSubtab==='excess'){
+    legend.innerHTML=`<div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Excesso sem demanda identificada</div>`;
+    if(!data.excessSolo.length){grid.innerHTML='<div class="placeholder"><div class="ico">✅</div><p>Todos os excessos têm falta correspondente</p></div>';return;}
+    grid.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:10px">'+data.excessSolo.map(g=>{
+      const r=[...new Set([...g.refs,...g.refsAgrup])].slice(0,8);
+      const sk=r.length?`<div class="sku-list" style="margin-top:6px">${r.map(s=>`<span class="sku">${s}</span>`).join('')}</div>`:'';
+      return`<div class="ce alert-excess" style="min-width:220px;max-width:320px;flex:1"><div class="ce-name">${g.especie} · ${g.grupoMestre}</div><div class="ce-row"><span>Medida</span><span style="color:var(--accent)">${g.medida}</span></div><div class="ce-row"><span>Dimensões</span><span>${[g.compr,g.larg,g.esp].filter(Boolean).join(' × ')} mm</span></div><div class="ce-row"><span>Status</span><span>${badge(g.statusFinal)}</span></div><div class="ce-row"><span>Est. PCP</span><span style="color:var(--teal)">${fmt(g.estPCP)} m³</span></div>${sk}<div class="ce-tip accent">↑ Oferecer ao comercial ou avaliar transformação</div></div>`;
+    }).join('')+'</div>';
+  } else if(currentSubtab==='risk'){
+    legend.innerHTML=`<div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Falta sem fonte de excesso identificada</div>`;
+    if(!data.riskSolo.length){grid.innerHTML='<div class="placeholder"><div class="ico">✅</div><p>Todas as faltas têm fonte de excesso</p></div>';return;}
+    const sorted=[...data.riskSolo].sort((a,b)=>{const aF=a.statusFinal.includes('Mês1')?0:1,bF=b.statusFinal.includes('Mês1')?0:1;return aF-bF||b.faltaAtual-a.faltaAtual;});
+    grid.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:10px">'+sorted.map(g=>{
+      const mes1=g.statusFinal.includes('Mês1')||g.statusFinal.includes('Mes1');
+      const r=[...new Set([...g.refs,...g.refsAgrup])].slice(0,8);
+      const sk=r.length?`<div class="sku-list" style="margin-top:6px">${r.map(s=>`<span class="sku">${s}</span>`).join('')}</div>`:'';
+      return`<div class="ce alert-risk" style="min-width:220px;max-width:320px;flex:1"><div class="ce-name">${g.especie} · ${g.grupoMestre}</div><div class="ce-row"><span>Medida</span><span style="color:var(--accent)">${g.medida}</span></div><div class="ce-row"><span>Dimensões</span><span>${[g.compr,g.larg,g.esp].filter(Boolean).join(' × ')} mm</span></div><div class="ce-row"><span>Status</span><span>${badge(g.statusFinal)}</span></div><div class="ce-row"><span>Est. PCP</span><span style="color:var(--teal)">${fmt(g.estPCP)} m³</span></div><div class="ce-row"><span>Falta Atual</span><span style="color:var(--danger)">${fmt(g.faltaAtual)} m³</span></div><div class="ce-row"><span>Falta Seg</span><span style="color:var(--warn)">${fmt(g.faltaSeg)} m³</span></div>${sk}<div class="ce-tip ${mes1?'bad':'warn'}">${mes1?'🚨 Falta iminente — ação urgente.':'⚠ Risco no próximo mês.'}</div></div>`;
+    }).join('')+'</div>';
+  }
+}
 function switchSubtab(id){
   currentSubtab=id;
   const map={exact:'active-exact',cut:'active-cut',excess:'active-excess',risk:'active-risk'};
-  ['exact','cut','excess','risk'].forEach(k=>{
-    const el=document.getElementById('st-'+k);
-    el.className='subtab'+(k===id?' '+map[k]:'');
-  });
-  const data=buildCrossData();
-  renderSubtab(data);
+  ['exact','cut','excess','risk'].forEach(k=>{document.getElementById('st-'+k).className='subtab'+(k===id?' '+map[k]:'');});
+  renderSubtab(buildCrossData());
 }
-
-// ── TABS PRINCIPAIS ─────────────────────────────────────────
 function switchTab(id){
-  const ids=['grafico','tabela','cross'];
+  const ids=['grafico','tabela','cross','queima'];
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===id));
   document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id==='tab-'+id));
 }
-
 window.addEventListener('load',()=>{ if(document.getElementById('sheet-url').value.trim()) loadSheet(); });
 </script>
 </body>
