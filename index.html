@@ -478,16 +478,14 @@ const C = {
   estComp:8, estPCP:9, faltaAtual:10, faltaSeg:11,
   totalAtual:12, totalSeg:13, refInd:14, refAgrup:15, medida:16,
   saidaSemestral:18,  // col S
-  demandaTotal:19,    // col T
-  precoMedio:39,      // col AN
-  cpvMedio:40,        // col AO
-  margemMedia:41      // col AP
+  demandaTotal:19     // col T
 };
 // ── COLUNAS pcp440 (0-based) ─────────────────────────────────
 const PCP = { ref:0, saidaVol:37 }; // col A=0, col AL=37
 
 let allRows=[], grouped=[], filtered=[];
-let pcpMap = new Map();   // ref → volume saída pcp440
+let pcpMap = new Map();     // ref → volume saída
+let pcpFinMap = new Map(); // ref → {preco, cpv, margem} pcp440
 let ch1=null, ch2=null;
 let currentSubtab='exact';
 
@@ -556,18 +554,36 @@ async function loadSheet() {
 }
 
 // ── PARSE PCP440 ─────────────────────────────────────────────
-// Col A = referência, Col AL (índice 37) = volume saída
+// Col A=0 → SKU | Col AL=37 → saída vol | Col AN=40 → preço | Col AO=41 → CPV | Col AP=42 → margem
 function parsePcp440(text) {
   pcpMap.clear();
   const lines=text.trim().split('\n');
+  const finAcc = new Map();
   for(let i=1;i<lines.length;i++){
     const cols=splitLine(lines[i]);
-    const ref=cl(cols[PCP.ref]);
-    const vol=num(cols[PCP.saidaVol]);
+    const ref=cl(cols[0]);
     if(!ref) continue;
-    // acumula caso ref apareça mais de uma vez
+    // volume saída (col AL = índice 37)
+    const vol=num(cols[37]);
     pcpMap.set(ref, (pcpMap.get(ref)||0) + vol);
+    // financeiro (cols AN=40, AO=41, AP=42)
+    const p =num(cols[40]);
+    const cv=num(cols[41]);
+    const mg=num(cols[42]);
+    if(p||cv||mg){
+      const acc=finAcc.get(ref)||{p:0,cv:0,mg:0,n:0};
+      acc.p+=p; acc.cv+=cv; acc.mg+=mg; acc.n++;
+      finAcc.set(ref,acc);
+    }
   }
+  pcpFinMap.clear();
+  finAcc.forEach((acc,ref)=>{
+    pcpFinMap.set(ref,{
+      preco: acc.n>0 ? acc.p/acc.n  : 0,
+      cpv:   acc.n>0 ? acc.cv/acc.n : 0,
+      margem:acc.n>0 ? acc.mg/acc.n : 0
+    });
+  });
 }
 
 // ── PARSE PRINCIPAL ──────────────────────────────────────────
@@ -607,7 +623,6 @@ function buildGrouped() {
         faltaAtual:0, faltaSeg:0, totalAtual:0,
         saidaSemestral:0,
         demandaTotal:0,
-        precoMedio:0, cpvMedio:0, margemMedia:0, _finCount:0,
         refs:new Set(), refsAgrup:new Set()
       });
     }
@@ -619,9 +634,6 @@ function buildGrouped() {
     g.totalAtual     +=num(row[C.totalAtual]);
     g.saidaSemestral +=num(row[C.saidaSemestral]);
     g.demandaTotal   +=num(row[C.demandaTotal]);
-    // financeiro: acumula para calcular média depois
-    const p=num(row[C.precoMedio]), cv=num(row[C.cpvMedio]), mg=num(row[C.margemMedia]);
-    if(p||cv||mg){ g.precoMedio+=p; g.cpvMedio+=cv; g.margemMedia+=mg; g._finCount++; }
     const st=cl(row[C.status]);
     if(hasDigit(go)&&st&&st!=='-'&&st!=='—') g.statuses.push(st);
     if(hasDigit(go)){
@@ -640,11 +652,6 @@ function buildGrouped() {
     g.comprN=parseInt(g.compr)||0;
     g.largN =parseInt(g.larg)||0;
     g.espN  =parseInt(g.esp)||0;
-    if(g._finCount>0){
-      g.precoMedio  = g.precoMedio  / g._finCount;
-      g.cpvMedio    = g.cpvMedio    / g._finCount;
-      g.margemMedia = g.margemMedia / g._finCount;
-    }
     return g;
   });
 }
@@ -869,7 +876,8 @@ function renderQueima() {
 function buildSkuCard(sc){
   const {ref, grupo:g, volSaida, demandaTotal}=sc;
   const imgUrl=`https://assets.tramontina.com.br/upload/tramon/imagens/BEL/${ref}PDM001G.jpg`;
-  const mgColor=g.margemMedia>0?margemColor(g.margemMedia):'var(--muted)';
+  const fin = pcpFinMap.get(ref) || {preco:0, cpv:0, margem:0};
+  const mgColor = fin.margem>0 ? margemColor(fin.margem) : 'var(--muted)';
 
   return `
   <div class="sku-card">
@@ -911,15 +919,15 @@ function buildSkuCard(sc){
         <hr class="sku-divider">
         <div class="sku-stat-row">
           <span class="sku-stat-label">Preço médio</span>
-          <span class="sku-stat-val">${fmtBRL(g.precoMedio)}<span style="font-size:9px;color:var(--muted);font-weight:400">/m³</span></span>
+          <span class="sku-stat-val">${fin.preco>0?fmtBRL(fin.preco)+'<span style="font-size:9px;color:var(--muted);font-weight:400">/m³</span>':'—'}</span>
         </div>
         <div class="sku-stat-row">
           <span class="sku-stat-label">CPV médio</span>
-          <span class="sku-stat-val">${fmtBRL(g.cpvMedio)}<span style="font-size:9px;color:var(--muted);font-weight:400">/m³</span></span>
+          <span class="sku-stat-val">${fin.cpv>0?fmtBRL(fin.cpv)+'<span style="font-size:9px;color:var(--muted);font-weight:400">/m³</span>':'—'}</span>
         </div>
         <div class="sku-stat-row">
           <span class="sku-stat-label">Margem média</span>
-          <span class="sku-stat-val" style="color:${mgColor}">${fmtPct(g.margemMedia)}</span>
+          <span class="sku-stat-val" style="color:${mgColor}">${fin.margem>0?fmtPct(fin.margem):'—'}</span>
         </div>
       </div>
     </div>
@@ -930,6 +938,7 @@ function buildSkuCard(sc){
       <span style="color:var(--muted2);font-size:9px">pcp440</span>
     </div>
   </div>`;
+}
 }
 
 // ══════════════════════════════════════════════════════════════
