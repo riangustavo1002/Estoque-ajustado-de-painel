@@ -524,7 +524,7 @@ async function loadSheet() {
   try {
     // Busca aba principal
     const res=await fetch(`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&gid=${gid}`);
-    if(!res.ok) throw new Error('HTTP '+res.status);
+    if(!res.ok) throw new Error('https'+res.status);
     const text=await res.text();
     if(text.startsWith('<!DOCTYPE')) throw new Error('PRIVATE');
 
@@ -868,7 +868,7 @@ function renderQueima() {
 
 function buildSkuCard(sc){
   const {ref, grupo:g, volSaida, demandaTotal}=sc;
-  const imgUrl=`http://assets.tramontina.com.br/upload/tramon/imagens/BEL/${ref}PDM001G.jpg`;
+  const imgUrl=`https://assets.tramontina.com.br/upload/tramon/imagens/BEL/${ref}PDM001G.jpg`;
   const mgColor=g.margemMedia>0?margemColor(g.margemMedia):'var(--muted)';
 
   return `
